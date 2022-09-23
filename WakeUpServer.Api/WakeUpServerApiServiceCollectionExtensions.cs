@@ -1,12 +1,13 @@
-﻿namespace WakeUpServer.Api;
-
-using Microsoft.Extensions.DependencyInjection;
-
-public static class WakeUpServerApiServiceCollectionExtensions
+﻿namespace WakeUpServer.Api
 {
-    public static IServiceCollection AddWakeUpServerApi(this IServiceCollection services)
+    using Microsoft.Extensions.DependencyInjection;
+
+    public static class WakeUpServerApiServiceCollectionExtensions
     {
-        services.AddTransient<UrlBuilder>();
-        return services;
+        public static IServiceCollection AddWakeUpServerApi(this IServiceCollection services)
+        {
+            services.AddTransient<UrlBuilder>();
+            return services;
+        }
     }
 }

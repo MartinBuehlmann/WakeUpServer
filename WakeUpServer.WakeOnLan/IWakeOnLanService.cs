@@ -1,6 +1,9 @@
-﻿namespace WakeUpServer.WakeOnLan;
-
-public interface IWakeOnLanService
+﻿namespace WakeUpServer.WakeOnLan
 {
-    void WakeOnLand(string macAddress);
+    using System.Threading.Tasks;
+
+    public interface IWakeOnLanService
+    {
+        Task WakeOnLanAsync(string macAddress);
+    }
 }

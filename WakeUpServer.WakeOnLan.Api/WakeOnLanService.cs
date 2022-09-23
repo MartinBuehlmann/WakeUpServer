@@ -1,11 +1,16 @@
-﻿namespace WakeUpServer.WakeOnLan.Api;
-
-using System;
-
-internal class WakeOnLanService : IWakeOnLanService
+﻿namespace WakeUpServer.WakeOnLan.Api
 {
-    public void WakeOnLand(string macAddress)
+    using System.Net;
+    using System.Net.NetworkInformation;
+    using System.Threading.Tasks;
+
+    internal class WakeOnLanService : IWakeOnLanService
     {
-        Console.WriteLine(macAddress);
+        public async Task WakeOnLanAsync(string macAddress)
+        {
+            await PhysicalAddress
+                .Parse(macAddress)
+                .SendWolAsync();
+        }
     }
 }

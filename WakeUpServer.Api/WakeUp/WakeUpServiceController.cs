@@ -1,22 +1,32 @@
-﻿namespace WakeUpServer.Api.WakeUp;
+﻿using System.ComponentModel.DataAnnotations;
 
-using Microsoft.AspNetCore.Mvc;
-using WakeUpServer.WakeOnLan;
-
-public class WakeUpServiceController : ApiController
+namespace WakeUpServer.Api.WakeUp
 {
-    private readonly IWakeOnLanService wakeOnLanServiceService;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc;
+    using WakeUpServer.WakeOnLan;
 
-    public WakeUpServiceController(IWakeOnLanService wakeOnLanServiceService)
+    public class WakeUpServiceController : ApiController
     {
-        this.wakeOnLanServiceService = wakeOnLanServiceService;
+        private readonly IWakeOnLanService wakeOnLanServiceService;
+
+        public WakeUpServiceController(IWakeOnLanService wakeOnLanServiceService)
+        {
+            this.wakeOnLanServiceService = wakeOnLanServiceService;
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> WakeUpAsync([FromBody] MacAddressInfo macAddress)
+        {
+            await this.wakeOnLanServiceService.WakeOnLanAsync(macAddress.MacAddress);
+            return this.Ok();
+        }
     }
 
-    // TODO: validate mac address
-    [HttpPut]
-    public IActionResult WakeUp(string macAddress)
+    public class MacAddressInfo
     {
-        this.wakeOnLanServiceService.WakeOnLand(macAddress);
-        return this.Ok();
+        [Required]
+        [RegularExpression("^((?:[0-9A-Fa-f]{2}[:]){5}(?:[0-9A-Fa-f]{2}))$|^((?:[0-9A-Fa-f]{2}[-]){5}(?:[0-9A-Fa-f]{2}))$")]
+        public string MacAddress { get; set; }
     }
 }

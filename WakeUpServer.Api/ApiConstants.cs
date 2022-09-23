@@ -1,6 +1,7 @@
-namespace WakeUpServer.Api;
-
-internal static class ApiConstants
+namespace WakeUpServer.Api
 {
-    public const string Route = "api";
+    internal static class ApiConstants
+    {
+        public const string Route = "api";
+    }
 }
