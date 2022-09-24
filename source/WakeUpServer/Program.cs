@@ -18,7 +18,7 @@ namespace WakeUpServer
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .WriteTo.File(
-                    "./../logs/WakeUpServer-.log)",
+                    "./../logs/WakeUpServer-.log",
                     rollingInterval: RollingInterval.Day,
                     outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {CorrelationId} {Level:u3}] {Username} {Message:lj}{NewLine}{Exception}",
                     fileSizeLimitBytes: 10 * 1024 * 1024,
