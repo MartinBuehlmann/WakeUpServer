@@ -1,0 +1,1 @@
+﻿curl -H "Content-Type: application/json" -X PUT http://192.168.1.22/api/WakeUpService -d "{\"macAddress\": \"3C:7C:3F:24:64:2F\"}"
