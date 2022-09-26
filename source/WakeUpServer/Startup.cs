@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using WakeUpServer.Logging;
 
 namespace WakeUpServer
 {
@@ -70,6 +71,8 @@ namespace WakeUpServer
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();
+            
+            app.UseMiddleware<RequestLoggingMiddleware>();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
