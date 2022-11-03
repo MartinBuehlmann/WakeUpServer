@@ -1,7 +1,4 @@
-﻿using Serilog;
-using WakeUpServer.Logging;
-
-namespace WakeUpServer
+﻿namespace WakeUpServer
 {
     using System.Linq;
     using Microsoft.AspNetCore.Builder;
@@ -11,6 +8,8 @@ namespace WakeUpServer
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.OpenApi.Models;
+    using Serilog;
+    using WakeUpServer.Logging;
 
     public class Startup
     {
@@ -71,7 +70,7 @@ namespace WakeUpServer
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();
-            
+
             app.UseMiddleware<RequestLoggingMiddleware>();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });

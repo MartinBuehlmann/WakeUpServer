@@ -1,12 +1,12 @@
-﻿using System;
-using Serilog;
-using Serilog.Events;
-
-namespace WakeUpServer
+﻿namespace WakeUpServer
 {
+    using System;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
+    using Serilog;
+    using Serilog.Events;
+    using WakeUpServer.BackgroundServices;
 
     public class Program
     {
@@ -35,6 +35,7 @@ namespace WakeUpServer
         {
             return Host.CreateDefaultBuilder(args)
                 .UseSerilog()
+                .ConfigureServices((_, services) => services.AddHostedService<BackgroundServiceHost>())
                 .ConfigureWebHostDefaults(webBuilder => webBuilder
                     .UseKestrel()
                     .UseUrls("http://*:5000")
