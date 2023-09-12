@@ -31,7 +31,7 @@
                 .CreateLogger();
 
             string? currentDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            Log.Information("Setting the current directory to '{currentDirectory}'", currentDirectory);
+            Log.Information("Setting the current directory to '{CurrentDirectory}'", currentDirectory);
             Directory.SetCurrentDirectory(currentDirectory!);
             CreateHostBuilder(args).Build().Run();
         }
@@ -39,7 +39,7 @@
         private static IHostBuilder CreateHostBuilder(string[] args)
         {
             string contentDirectory = $"{DirectoryProvider.ResolveContentDirectory()}/wwwroot";
-            Log.Information("Setting the web root directory to '{contentDirectory}'", contentDirectory);
+            Log.Information("Setting the web root directory to '{ContentDirectory}'", contentDirectory);
 
             return Host.CreateDefaultBuilder(args)
                 .UseSerilog()

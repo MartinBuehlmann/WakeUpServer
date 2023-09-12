@@ -1,5 +1,7 @@
 namespace WakeUpServer.Reporting.Services
 {
+    using System;
+
     internal class WakeUpCallsFileNameBuilder
     {
         private const string WakeUpCallsFileName = "WakeUpCalls";

@@ -1,5 +1,8 @@
 ﻿namespace WakeUpServer.EventBroker
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using WakeUpServer.Common;
 
     internal class EventRegistration : IEventRegistration
@@ -20,9 +23,9 @@
             lock (this.subscriptionLock)
             {
                 Type eventDataType = data.GetType();
-                if (this.subscriptions.ContainsKey(eventDataType))
+                if (this.subscriptions.TryGetValue(eventDataType, out var subscription))
                 {
-                    return this.subscriptions[eventDataType].ToList();
+                    return subscription.ToList();
                 }
             }
 

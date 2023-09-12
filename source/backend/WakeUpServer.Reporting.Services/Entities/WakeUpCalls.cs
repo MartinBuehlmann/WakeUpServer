@@ -1,5 +1,7 @@
 namespace WakeUpServer.Reporting.Services.Entities
 {
+    using System.Collections.Generic;
+
     internal class WakeUpCalls
     {
         public WakeUpCalls()

@@ -1,5 +1,7 @@
 namespace WakeUpServer.FileStorage
 {
+    using System;
+
     public interface IFileStorage
     {
         T? Read<T>(string file);

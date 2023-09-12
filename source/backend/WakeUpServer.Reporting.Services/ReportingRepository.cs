@@ -1,4 +1,3 @@
-using WakeUpServer.Common;
 using WakeUpServer.FileStorage;
 using WakeUpServer.Reporting.Domain;
 using WakeUpServer.Reporting.Services.Entities;
@@ -6,6 +5,8 @@ using WakeUpServer.Reporting.Services.MonthReport;
 
 namespace WakeUpServer.Reporting.Services
 {
+    using System;
+
     internal class ReportingRepository : IReportingRepository
     {
         private readonly MonthReportCreator monthReportCreator;
@@ -35,7 +36,7 @@ namespace WakeUpServer.Reporting.Services
                 this.wakeUpCallsFileNameBuilder.Build(
                     new DateTimeOffset(
                         new DateTime(year, month, 1))));
-            
+
             return this.monthReportCreator.Create(year, month, wakeUpCalls);
         }
     }

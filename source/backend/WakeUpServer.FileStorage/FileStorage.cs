@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace WakeUpServer.FileStorage
 {
+    using System;
+    using System.IO;
+
     internal class FileStorage : IFileStorage
     {
         private readonly string directory;

@@ -1,5 +1,7 @@
 namespace WakeUpServer.Reporting.Services.Entities
 {
+    using System;
+
     internal class WakeUpCall
     {
         public WakeUpCall(string callerIpAddress, string macAddress, DateTimeOffset timeStamp)
@@ -10,9 +12,9 @@ namespace WakeUpServer.Reporting.Services.Entities
         }
 
         public string CallerIpAddress { get; }
-    
+
         public string MacAddress { get; }
-    
+
         public DateTimeOffset TimeStamp { get; }
     }
 }

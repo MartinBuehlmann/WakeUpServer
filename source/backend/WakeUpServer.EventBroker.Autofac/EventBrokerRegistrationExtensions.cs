@@ -3,6 +3,8 @@ using Autofac.Builder;
 
 namespace WakeUpServer.EventBroker.Autofac
 {
+    using System;
+
     public static class EventBrokerRegistrationExtensions
     {
         public static IRegistrationBuilder<TLimit, TActivatorData, TSingleRegistrationStyle>

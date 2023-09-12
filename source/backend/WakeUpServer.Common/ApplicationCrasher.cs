@@ -1,8 +1,10 @@
-using System.Runtime.ExceptionServices;
-using Serilog;
-
 namespace WakeUpServer.Common
 {
+    using System;
+    using System.Runtime.ExceptionServices;
+    using System.Threading;
+    using Serilog;
+
     public class ApplicationCrasher
     {
         public void CrashApplication(Exception exception)

@@ -1,5 +1,6 @@
 namespace WakeUpServer.EventBroker
 {
+    using System;
     using Microsoft.Extensions.DependencyInjection;
 
     public class EventSubscriber
@@ -15,6 +16,12 @@ namespace WakeUpServer.EventBroker
         {
             var subscription = this.serviceProvider.GetService<IEventRegistration>()!;
             subscription.Register(eventSubscription);
+        }
+
+        public void Unsubscribe(IEventSubscriptionBase eventSubscription)
+        {
+            var subscription = this.serviceProvider.GetService<IEventRegistration>()!;
+            subscription.Unregister(eventSubscription);
         }
     }
 }

@@ -16,14 +16,14 @@ namespace WakeUpServer.BackgroundServices
             this.backgroundServices = backgroundServices.ToList();
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
+            await Task.WhenAll(this.backgroundServices.Select(x => x.StartAsync()));
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        public async Task StopAsync(CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
+            await Task.WhenAll(this.backgroundServices.Select(x => x.StopAsync()));
         }
     }
 }
