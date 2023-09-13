@@ -6,6 +6,7 @@
     using WakeUpServer.Common;
     using WakeUpServer.EventBroker;
     using WakeUpServer.FileStorage;
+    using WakeUpServer.IoT.Edge;
     using WakeUpServer.Reporting.Services;
     using WakeUpServer.WakeOnLan.Api;
 
@@ -16,6 +17,7 @@
             services.AddCommon();
             services.AddEventBroker();
             services.AddFileStorage();
+            services.AddIotEdgeServices();
             services.AddReportingServices();
             services.AddWakeOnLan();
             services.AddWakeUpServerApi();

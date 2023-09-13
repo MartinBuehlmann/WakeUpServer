@@ -18,12 +18,12 @@ namespace WakeUpServer.BackgroundServices
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            await Task.WhenAll(this.backgroundServices.Select(x => x.StartAsync()));
+            await Task.WhenAll(this.backgroundServices.Select(x => x.StartAsync(cancellationToken)));
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            await Task.WhenAll(this.backgroundServices.Select(x => x.StopAsync()));
+            await Task.WhenAll(this.backgroundServices.Select(x => x.StopAsync(cancellationToken)));
         }
     }
 }

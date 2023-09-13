@@ -9,7 +9,7 @@ namespace WakeUpServer.Reporting.Services
     {
         public static IServiceCollection AddReportingServices(this IServiceCollection services)
         {
-            services.AddTransient<IBackgroundService, WakeUpObserver>();
+            services.AddTransient<IBackgroundService, WakeUpReportingObserver>();
             services.AddTransient<IReportingRepository, ReportingRepository>();
             services.AddTransient<MonthReportCreator>();
             services.AddTransient<WakeUpCallsFileNameBuilder>();

@@ -23,6 +23,7 @@
       <ProjectReference Include="..\WakeUpServer.Api\WakeUpServer.Api.csproj" />
       <ProjectReference Include="..\WakeUpServer.EventBroker\WakeUpServer.EventBroker.csproj" />
       <ProjectReference Include="..\WakeUpServer.FileStorage\WakeUpServer.FileStorage.csproj" />
+      <ProjectReference Include="..\WakeUpServer.IoT.Edge\WakeUpServer.IoT.Edge.csproj" />
       <ProjectReference Include="..\WakeUpServer.Reporting.Services\WakeUpServer.Reporting.Services.csproj" />
       <ProjectReference Include="..\WakeUpServer.WakeOnLan.Api\WakeUpServer.WakeOnLan.Api.csproj" />
       <ProjectReference Include="..\WakeUpServer.Web\WakeUpServer.Web.csproj" />
