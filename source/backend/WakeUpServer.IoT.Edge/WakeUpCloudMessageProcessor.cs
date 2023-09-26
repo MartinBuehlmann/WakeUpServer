@@ -4,7 +4,7 @@ namespace WakeUpServer.IoT.Edge
 
     public class WakeUpCloudMessageProcessor
     {
-        private const string ConnectionString = "";
+        private const string ConnectionString = "HostName=CloutWakeUpIoTHub.azure-devices.net;DeviceId=WakeUpServerErowaTsj;SharedAccessKey=p3ntusqRob/Pauoa6zZg+iH4JK0zI6fESlVYU0EYrNI=";
         private readonly AzureDeviceClientWrapper client;
         private readonly MessageHandler messageHandler;
 

@@ -29,7 +29,7 @@
             }
 
             this.cancellationTokenSource.Cancel();
-            await this.messageProcessingTask!.WaitAsync(TimeSpan.FromSeconds(30), CancellationToken.None);
+            await this.messageProcessingTask!.WaitAsync(TimeSpan.FromSeconds(30), cancellationToken);
         }
     }
 }
