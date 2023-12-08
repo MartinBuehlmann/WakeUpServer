@@ -6,6 +6,7 @@ using WakeUpServer.Reporting.Services.MonthReport;
 namespace WakeUpServer.Reporting.Services;
 
 using System;
+using System.Threading.Tasks;
 
 internal class ReportingRepository : IReportingRepository
 {
@@ -23,16 +24,16 @@ internal class ReportingRepository : IReportingRepository
         this.fileStorage = fileStorage;
     }
 
-    public void AddWakeUpReport(string callingIpAddress, string macAddress, DateTimeOffset timeStamp)
+    public async Task AddWakeUpReportAsync(string callingIpAddress, string macAddress, DateTimeOffset timeStamp)
     {
-        this.fileStorage.Update<WakeUpCalls>(
+        await this.fileStorage.UpdateAsync<WakeUpCalls>(
             this.wakeUpCallsFileNameBuilder.Build(timeStamp),
             x => x.Items.Add(new WakeUpCall(callingIpAddress, macAddress, timeStamp)));
     }
 
-    public MonthReportItem RetrieveMonthReport(int year, int month)
+    public async Task<MonthReportItem> RetrieveMonthReportAsync(int year, int month)
     {
-        var wakeUpCalls = this.fileStorage.Read<WakeUpCalls>(
+        var wakeUpCalls = await this.fileStorage.ReadAsync<WakeUpCalls>(
             this.wakeUpCallsFileNameBuilder.Build(
                 new DateTimeOffset(
                     new DateTime(year, month, 1))));

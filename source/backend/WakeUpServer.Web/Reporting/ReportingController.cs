@@ -1,6 +1,7 @@
 ﻿namespace WakeUpServer.Web.Reporting;
 
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WakeUpServer.Reporting;
 using WakeUpServer.Reporting.Domain;
@@ -14,11 +15,10 @@ public class ReportingController : WebController
         this.reportingRepository = reportingRepository;
     }
 
-    // TODO: Try to make async (improve file access)
     [HttpGet("{year:int}/{month:int}")]
-    public MonthReportInfo RetrieveMonthlyReport(int year, int month)
+    public async Task<MonthReportInfo> RetrieveMonthlyReportAsync(int year, int month)
     {
-        MonthReportItem monthlyReportItem = this.reportingRepository.RetrieveMonthReport(year, month);
+        MonthReportItem monthlyReportItem = await this.reportingRepository.RetrieveMonthReportAsync(year, month);
 
         return new MonthReportInfo(
             monthlyReportItem.Year,

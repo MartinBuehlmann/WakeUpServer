@@ -18,13 +18,12 @@ internal class WakeUpObserver : IBackgroundService, IEventSubscriptionAsync<Wake
         this.eventSubscriber = eventSubscriber;
     }
 
-    public Task HandleAsync(WakeUpEvent data)
+    public async Task HandleAsync(WakeUpEvent data)
     {
-        this.reportingRepository.AddWakeUpReport(
+        await this.reportingRepository.AddWakeUpReportAsync(
             data.CallingIpAddress,
             data.MacAddress,
             data.TimeStamp);
-        return Task.CompletedTask;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
