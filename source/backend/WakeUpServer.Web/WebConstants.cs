@@ -1,7 +1,6 @@
-namespace WakeUpServer.Web
+namespace WakeUpServer.Web;
+
+internal static class WebConstants
 {
-    internal static class WebConstants
-    {
-        public const string Route = "web";
-    }
+    public const string Route = "web";
 }

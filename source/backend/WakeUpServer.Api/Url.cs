@@ -1,12 +1,11 @@
-﻿namespace WakeUpServer.Api
-{
-    public class Url
-    {
-        public Url(string href)
-        {
-            this.Href = href;
-        }
+﻿namespace WakeUpServer.Api;
 
-        public string Href { get; }
+public class Url
+{
+    public Url(string href)
+    {
+        this.Href = href;
     }
+
+    public string Href { get; }
 }

@@ -1,11 +1,10 @@
-﻿namespace WakeUpServer.Web
-{
-    using Microsoft.AspNetCore.Mvc;
+﻿namespace WakeUpServer.Web;
 
-    [ApiExplorerSettings(GroupName = WebConstants.Route)]
-    [Route(WebConstants.Route + "/[controller]")]
-    [Consumes("application/json")]
-    public abstract class WebController : Controller
-    {
-    }
+using Microsoft.AspNetCore.Mvc;
+
+[ApiExplorerSettings(GroupName = WebConstants.Route)]
+[Route(WebConstants.Route + "/[controller]")]
+[Consumes("application/json")]
+public abstract class WebController : Controller
+{
 }

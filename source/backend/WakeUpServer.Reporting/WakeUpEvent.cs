@@ -1,6 +1,5 @@
-namespace WakeUpServer.Reporting
-{
-    using System;
+namespace WakeUpServer.Reporting;
 
-    public record WakeUpEvent(string CallingIpAddress, string MacAddress, DateTimeOffset TimeStamp);
-}
+using System;
+
+public record WakeUpEvent(string CallingIpAddress, string MacAddress, DateTimeOffset TimeStamp);

@@ -1,10 +1,9 @@
-﻿namespace WakeUpServer.EventBroker
-{
-    public interface IEventBroker
-    {
-        int QueuedEvents { get; }
+﻿namespace WakeUpServer.EventBroker;
 
-        void Publish<T>(T data)
-            where T : class;
-    }
+public interface IEventBroker
+{
+    int QueuedEvents { get; }
+
+    void Publish<T>(T data)
+        where T : class;
 }

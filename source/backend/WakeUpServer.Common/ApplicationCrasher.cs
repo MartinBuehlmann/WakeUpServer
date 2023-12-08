@@ -1,21 +1,20 @@
-namespace WakeUpServer.Common
-{
-    using System;
-    using System.Runtime.ExceptionServices;
-    using System.Threading;
-    using Serilog;
+namespace WakeUpServer.Common;
 
-    public class ApplicationCrasher
+using System;
+using System.Runtime.ExceptionServices;
+using System.Threading;
+using Serilog;
+
+public class ApplicationCrasher
+{
+    public void CrashApplication(Exception exception)
     {
-        public void CrashApplication(Exception exception)
+        Log.Fatal(exception, "Crash application due of an unhandled exception");
+        var thread = new Thread(() => ExceptionDispatchInfo.Capture(exception).Throw())
         {
-            Log.Fatal(exception, "Crash application due of an unhandled exception");
-            var thread = new Thread(() => ExceptionDispatchInfo.Capture(exception).Throw())
-            {
-                Name = nameof(ApplicationCrasher)
-            };
-            thread.Start();
-            thread.Join();
-        }
+            Name = nameof(ApplicationCrasher)
+        };
+        thread.Start();
+        thread.Join();
     }
 }

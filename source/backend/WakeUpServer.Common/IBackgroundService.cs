@@ -1,12 +1,11 @@
-namespace WakeUpServer.Common
+namespace WakeUpServer.Common;
+
+using System.Threading;
+using System.Threading.Tasks;
+
+public interface IBackgroundService
 {
-    using System.Threading.Tasks;
+    Task StartAsync(CancellationToken cancellationToken);
 
-    public interface IBackgroundService
-    {
-        Task StartAsync();
-
-        Task StopAsync();
-    }
+    Task StopAsync(CancellationToken cancellationToken);
 }
-

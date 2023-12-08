@@ -1,67 +1,66 @@
-﻿namespace WakeUpServer.EventBroker
+﻿namespace WakeUpServer.EventBroker;
+
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading;
+using System.Threading.Tasks;
+using WakeUpServer.Common;
+
+internal class EventBroker : IEventBroker
 {
-    using System;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using WakeUpServer.Common;
+    private readonly IEventRegistration registration;
+    private readonly ApplicationCrasher applicationCrasher;
+    private int eventCount;
 
-    internal class EventBroker : IEventBroker
+    public EventBroker(
+        IEventRegistration registration,
+        ApplicationCrasher applicationCrasher)
     {
-        private readonly IEventRegistration registration;
-        private readonly ApplicationCrasher applicationCrasher;
-        private int eventCount;
+        this.registration = registration;
+        this.applicationCrasher = applicationCrasher;
+    }
 
-        public EventBroker(
-            IEventRegistration registration,
-            ApplicationCrasher applicationCrasher)
+    public int QueuedEvents => this.eventCount;
+
+    public void Publish<T>(T data)
+        where T : class
+    {
+        foreach (IEventSubscriptionBase subscription in ((EventRegistration) this.registration).Retrieve(data))
         {
-            this.registration = registration;
-            this.applicationCrasher = applicationCrasher;
+            this.FireAndForgetEvent(data, subscription);
         }
+    }
 
-        public int QueuedEvents => this.eventCount;
+    [SuppressMessage("Microsoft.VisualStudio.Threading.Analyzers", "VSTHRD110",
+        Justification = "It's fire and forget")]
+    private void FireAndForgetEvent<T>(T data, IEventSubscriptionBase subscription)
+    {
+        Interlocked.Increment(ref this.eventCount);
+        Task.Run(() => this.DispatchEvenAsync(data, subscription));
+    }
 
-        public void Publish<T>(T data)
-            where T : class
+    [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes",
+        Justification = "This method is designed to catch all exceptions.")]
+    private async Task DispatchEvenAsync<T>(T data, IEventSubscriptionBase subscription)
+    {
+        try
         {
-            foreach (IEventSubscriptionBase subscription in ((EventRegistration) this.registration).Retrieve(data))
+            if (subscription is IEventSubscriptionAsync<T> asyncSubscription)
             {
-                this.FireAndForgetEvent(data, subscription);
+                await asyncSubscription.HandleAsync(data);
+            }
+            else
+            {
+                ((IEventSubscription<T>) subscription).Handle(data);
             }
         }
-
-        [SuppressMessage("Microsoft.VisualStudio.Threading.Analyzers", "VSTHRD110",
-            Justification = "It's fire and forget")]
-        private void FireAndForgetEvent<T>(T data, IEventSubscriptionBase subscription)
+        catch (Exception exception)
         {
-            Interlocked.Increment(ref this.eventCount);
-            Task.Run(() => this.DispatchEvenAsync(data, subscription));
+            this.applicationCrasher.CrashApplication(exception);
         }
-
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes",
-            Justification = "This method is designed to catch all exceptions.")]
-        private async Task DispatchEvenAsync<T>(T data, IEventSubscriptionBase subscription)
+        finally
         {
-            try
-            {
-                if (subscription is IEventSubscriptionAsync<T> asyncSubscription)
-                {
-                    await asyncSubscription.HandleAsync(data);
-                }
-                else
-                {
-                    ((IEventSubscription<T>) subscription).Handle(data);
-                }
-            }
-            catch (Exception exception)
-            {
-                this.applicationCrasher.CrashApplication(exception);
-            }
-            finally
-            {
-                Interlocked.Decrement(ref this.eventCount);
-            }
+            Interlocked.Decrement(ref this.eventCount);
         }
     }
 }

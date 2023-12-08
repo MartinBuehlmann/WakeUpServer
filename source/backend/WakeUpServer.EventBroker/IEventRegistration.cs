@@ -1,9 +1,8 @@
-﻿namespace WakeUpServer.EventBroker
-{
-    public interface IEventRegistration
-    {
-        void Register(IEventSubscriptionBase instance);
+﻿namespace WakeUpServer.EventBroker;
 
-        void Unregister(IEventSubscriptionBase instance);
-    }
+public interface IEventRegistration
+{
+    void Register(IEventSubscriptionBase instance);
+
+    void Unregister(IEventSubscriptionBase instance);
 }

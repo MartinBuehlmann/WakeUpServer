@@ -1,41 +1,40 @@
-namespace WakeUpServer.Reporting.Services
+namespace WakeUpServer.Reporting.Services;
+
+using System.Threading;
+using System.Threading.Tasks;
+using WakeUpServer.Common;
+using WakeUpServer.EventBroker;
+
+internal class WakeUpObserver : IBackgroundService, IEventSubscriptionAsync<WakeUpEvent>
 {
-    using System.Threading.Tasks;
-    using WakeUpServer.Common;
-    using WakeUpServer.EventBroker;
+    private readonly IReportingRepository reportingRepository;
+    private readonly EventSubscriber eventSubscriber;
 
-    internal class WakeUpObserver : IBackgroundService, IEventSubscriptionAsync<WakeUpEvent>
+    public WakeUpObserver(
+        IReportingRepository reportingRepository,
+        EventSubscriber eventSubscriber)
     {
-        private readonly IReportingRepository reportingRepository;
-        private readonly EventSubscriber eventSubscriber;
+        this.reportingRepository = reportingRepository;
+        this.eventSubscriber = eventSubscriber;
+    }
 
-        public WakeUpObserver(
-            IReportingRepository reportingRepository,
-            EventSubscriber eventSubscriber)
-        {
-            this.reportingRepository = reportingRepository;
-            this.eventSubscriber = eventSubscriber;
-        }
+    public async Task HandleAsync(WakeUpEvent data)
+    {
+        await this.reportingRepository.AddWakeUpReportAsync(
+            data.CallingIpAddress,
+            data.MacAddress,
+            data.TimeStamp);
+    }
 
-        public Task HandleAsync(WakeUpEvent data)
-        {
-            this.reportingRepository.AddWakeUpReport(
-                data.CallingIpAddress,
-                data.MacAddress,
-                data.TimeStamp);
-            return Task.CompletedTask;
-        }
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        this.eventSubscriber.Subscribe(this);
+        return Task.CompletedTask;
+    }
 
-        public Task StartAsync()
-        {
-            this.eventSubscriber.Subscribe(this);
-            return Task.CompletedTask;
-        }
-
-        public Task StopAsync()
-        {
-            this.eventSubscriber.Unsubscribe(this);
-            return Task.CompletedTask;
-        }
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        this.eventSubscriber.Unsubscribe(this);
+        return Task.CompletedTask;
     }
 }

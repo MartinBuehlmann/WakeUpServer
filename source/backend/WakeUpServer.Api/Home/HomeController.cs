@@ -1,22 +1,21 @@
-﻿namespace WakeUpServer.Api.Home
+﻿namespace WakeUpServer.Api.Home;
+
+using Microsoft.AspNetCore.Mvc;
+using WakeUpServer.Api.WakeUp;
+
+[Microsoft.AspNetCore.Components.Route(ApiConstants.Route)]
+public class HomeController : ApiController
 {
-    using Microsoft.AspNetCore.Mvc;
-    using WakeUpServer.Api.WakeUp;
+    private readonly UrlBuilder urlBuilder;
 
-    [Microsoft.AspNetCore.Components.Route(ApiConstants.Route)]
-    public class HomeController : ApiController
+    public HomeController(UrlBuilder urlBuilder)
     {
-        private readonly UrlBuilder urlBuilder;
+        this.urlBuilder = urlBuilder;
+    }
 
-        public HomeController(UrlBuilder urlBuilder)
-        {
-            this.urlBuilder = urlBuilder;
-        }
-
-        [HttpGet]
-        public ApiHomeInfo Retrieve()
-        {
-            return new ApiHomeInfo(new Url(this.urlBuilder.Build(ApiConstants.Route, nameof(WakeUpServiceController))));
-        }
+    [HttpGet]
+    public ApiHomeInfo Retrieve()
+    {
+        return new ApiHomeInfo(new Url(this.urlBuilder.Build(ApiConstants.Route, nameof(WakeUpServiceController))));
     }
 }

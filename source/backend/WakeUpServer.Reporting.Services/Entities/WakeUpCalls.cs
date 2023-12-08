@@ -1,14 +1,13 @@
-namespace WakeUpServer.Reporting.Services.Entities
+namespace WakeUpServer.Reporting.Services.Entities;
+
+using System.Collections.Generic;
+
+internal class WakeUpCalls
 {
-    using System.Collections.Generic;
-
-    internal class WakeUpCalls
+    public WakeUpCalls()
     {
-        public WakeUpCalls()
-        {
-            this.Items = new List<WakeUpCall>();
-        }
-
-        public List<WakeUpCall> Items { get; }
+        this.Items = new List<WakeUpCall>();
     }
+
+    public List<WakeUpCall> Items { get; }
 }

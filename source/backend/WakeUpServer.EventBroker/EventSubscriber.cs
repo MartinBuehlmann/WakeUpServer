@@ -1,27 +1,26 @@
-namespace WakeUpServer.EventBroker
+namespace WakeUpServer.EventBroker;
+
+using System;
+using Microsoft.Extensions.DependencyInjection;
+
+public class EventSubscriber
 {
-    using System;
-    using Microsoft.Extensions.DependencyInjection;
+    private readonly IServiceProvider serviceProvider;
 
-    public class EventSubscriber
+    public EventSubscriber(IServiceProvider serviceProvider)
     {
-        private readonly IServiceProvider serviceProvider;
+        this.serviceProvider = serviceProvider;
+    }
 
-        public EventSubscriber(IServiceProvider serviceProvider)
-        {
-            this.serviceProvider = serviceProvider;
-        }
+    public void Subscribe(IEventSubscriptionBase eventSubscription)
+    {
+        var subscription = this.serviceProvider.GetService<IEventRegistration>()!;
+        subscription.Register(eventSubscription);
+    }
 
-        public void Subscribe(IEventSubscriptionBase eventSubscription)
-        {
-            var subscription = this.serviceProvider.GetService<IEventRegistration>()!;
-            subscription.Register(eventSubscription);
-        }
-
-        public void Unsubscribe(IEventSubscriptionBase eventSubscription)
-        {
-            var subscription = this.serviceProvider.GetService<IEventRegistration>()!;
-            subscription.Unregister(eventSubscription);
-        }
+    public void Unsubscribe(IEventSubscriptionBase eventSubscription)
+    {
+        var subscription = this.serviceProvider.GetService<IEventRegistration>()!;
+        subscription.Unregister(eventSubscription);
     }
 }

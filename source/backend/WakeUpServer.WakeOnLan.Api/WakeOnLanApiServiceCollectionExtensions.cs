@@ -1,13 +1,12 @@
-namespace WakeUpServer.WakeOnLan.Api
-{
-    using Microsoft.Extensions.DependencyInjection;
+namespace WakeUpServer.WakeOnLan.Api;
 
-    public static class WakeOnLanApiServiceCollectionExtensions
+using Microsoft.Extensions.DependencyInjection;
+
+public static class WakeOnLanApiServiceCollectionExtensions
+{
+    public static IServiceCollection AddWakeOnLan(this IServiceCollection services)
     {
-        public static IServiceCollection AddWakeOnLan(this IServiceCollection services)
-        {
-            services.AddTransient<IWakeOnLanService, WakeOnLanService>();
-            return services;
-        }
+        services.AddTransient<IWakeOnLanService, WakeOnLanService>();
+        return services;
     }
 }

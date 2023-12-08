@@ -2,73 +2,92 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using Newtonsoft.Json;
 
-namespace WakeUpServer.FileStorage
+namespace WakeUpServer.FileStorage;
+
+using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+
+internal class FileStorage : IFileStorage
 {
-    using System;
-    using System.IO;
+    private readonly string directory;
+    private readonly ConcurrentDictionary<string, SemaphoreSlim> fileLocks;
 
-    internal class FileStorage : IFileStorage
+    public FileStorage()
     {
-        private readonly string directory;
-        private readonly ConcurrentDictionary<string, object> fileLocks;
+        this.fileLocks = new ConcurrentDictionary<string, SemaphoreSlim>();
+        this.directory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "../Data");
+        this.EnsureDataDirectoryExists();
+    }
 
-        public FileStorage()
+    public async Task<T?> ReadAsync<T>(string file)
+    {
+        string filePath = Path.Combine(this.directory, $"{file}.json");
+        var semaphore = this.fileLocks.GetOrAdd(filePath, new SemaphoreSlim(1, 1));
+        await semaphore.WaitAsync();
+        try
         {
-            this.fileLocks = new ConcurrentDictionary<string, object>();
-            this.directory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "../Data");
-            this.EnsureDataDirectoryExists();
-        }
-
-        public T? Read<T>(string file)
-        {
-            string filePath = Path.Combine(this.directory, $"{file}.json");
-            lock (this.fileLocks.GetOrAdd(file, _ => new object()))
+            if (!File.Exists(filePath))
             {
-                if (!File.Exists(filePath))
-                {
-                    return default;
-                }
-
-                string jsonResult = File.ReadAllText(filePath);
-                return JsonConvert.DeserializeObject<T>(jsonResult);
+                return default;
             }
+
+            string jsonResult = await File.ReadAllTextAsync(filePath);
+            return JsonConvert.DeserializeObject<T>(jsonResult);
         }
-
-        public void Write<T>(T? data, string file)
+        finally
         {
-            string filePath = Path.Combine(this.directory, $"{file}.json");
-            lock (this.fileLocks.GetOrAdd(file, _ => new object()))
-            {
-                string jsonResult = JsonConvert.SerializeObject(data);
-                File.WriteAllText(filePath, jsonResult);
-            }
+            semaphore.Release();
         }
+    }
 
-        public void Update<T>(string file, Action<T> updateAction)
-            where T : new()
+    public async Task WriteAsync<T>(T? data, string file)
+    {
+        string filePath = Path.Combine(this.directory, $"{file}.json");
+        var semaphore = this.fileLocks.GetOrAdd(filePath, new SemaphoreSlim(1, 1));
+        await semaphore.WaitAsync();
+        try
         {
-            string filePath = Path.Combine(this.directory, $"{file}.json");
-            lock (this.fileLocks.GetOrAdd(file, _ => new object()))
-            {
-                var data = new T();
-                if (File.Exists(filePath))
-                {
-                    string content = File.ReadAllText(filePath);
-                    data = JsonConvert.DeserializeObject<T>(content)!;
-                }
-
-                updateAction(data);
-
-                File.WriteAllText(filePath, JsonConvert.SerializeObject(data));
-            }
+            string jsonResult = JsonConvert.SerializeObject(data);
+            await File.WriteAllTextAsync(filePath, jsonResult);
         }
-
-        private void EnsureDataDirectoryExists()
+        finally
         {
-            if (!Directory.Exists(this.directory))
+            semaphore.Release();
+        }
+    }
+
+    public async Task UpdateAsync<T>(string file, Action<T> updateAction)
+        where T : new()
+    {
+        string filePath = Path.Combine(this.directory, $"{file}.json");
+        var semaphore = this.fileLocks.GetOrAdd(filePath, new SemaphoreSlim(1, 1));
+        await semaphore.WaitAsync();
+        try
+        {
+            var data = new T();
+            if (File.Exists(filePath))
             {
-                Directory.CreateDirectory(this.directory);
+                string content = await File.ReadAllTextAsync(filePath);
+                data = JsonConvert.DeserializeObject<T>(content)!;
             }
+
+            updateAction(data);
+
+            await File.WriteAllTextAsync(filePath, JsonConvert.SerializeObject(data));
+        }
+        finally
+        {
+            semaphore.Release();
+        }
+    }
+
+    private void EnsureDataDirectoryExists()
+    {
+        if (!Directory.Exists(this.directory))
+        {
+            Directory.CreateDirectory(this.directory);
         }
     }
 }

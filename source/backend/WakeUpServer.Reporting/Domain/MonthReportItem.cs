@@ -1,6 +1,5 @@
-namespace WakeUpServer.Reporting.Domain
-{
-    using System.Collections.Generic;
+namespace WakeUpServer.Reporting.Domain;
 
-    public record MonthReportItem(int Year, int Month, IReadOnlyList<ReportItem> ReportItems);
-}
+using System.Collections.Generic;
+
+public record MonthReportItem(int Year, int Month, IReadOnlyList<ReportItem> ReportItems);
