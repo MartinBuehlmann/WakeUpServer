@@ -1,12 +1,11 @@
-namespace WakeUpServer.Reporting.Services
+namespace WakeUpServer.Reporting.Services;
+
+using System;
+
+internal class WakeUpCallsFileNameBuilder
 {
-    using System;
+    private const string WakeUpCallsFileName = "WakeUpCalls";
 
-    internal class WakeUpCallsFileNameBuilder
-    {
-        private const string WakeUpCallsFileName = "WakeUpCalls";
-
-        public string Build(DateTimeOffset timeStamp)
-            => $"{WakeUpCallsFileName}_{timeStamp.Year}_{timeStamp.ToString("MM")}";
-    }
+    public string Build(DateTimeOffset timeStamp)
+        => $"{WakeUpCallsFileName}_{timeStamp.Year}_{timeStamp:MM}";
 }

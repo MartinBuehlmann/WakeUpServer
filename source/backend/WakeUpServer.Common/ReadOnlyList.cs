@@ -1,12 +1,11 @@
-namespace WakeUpServer.Common
-{
-    using System.Collections.Generic;
+namespace WakeUpServer.Common;
 
-    public static class ReadOnlyList
+using System.Collections.Generic;
+
+public static class ReadOnlyList
+{
+    public static IReadOnlyList<T> Empty<T>()
     {
-        public static IReadOnlyList<T> Empty<T>()
-        {
-            return new List<T>().AsReadOnly();
-        }
+        return new List<T>().AsReadOnly();
     }
 }

@@ -1,79 +1,78 @@
-﻿namespace WakeUpServer.EventBroker
+﻿namespace WakeUpServer.EventBroker;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using WakeUpServer.Common;
+
+internal class EventRegistration : IEventRegistration
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using WakeUpServer.Common;
+    private readonly object subscriptionLock;
 
-    internal class EventRegistration : IEventRegistration
+    private readonly IDictionary<Type, List<IEventSubscriptionBase>> subscriptions =
+        new Dictionary<Type, List<IEventSubscriptionBase>>();
+
+    public EventRegistration()
     {
-        private readonly object subscriptionLock;
+        this.subscriptionLock = new object();
+    }
 
-        private readonly IDictionary<Type, List<IEventSubscriptionBase>> subscriptions =
-            new Dictionary<Type, List<IEventSubscriptionBase>>();
-
-        public EventRegistration()
+    public IReadOnlyList<IEventSubscriptionBase> Retrieve<TEventData>(TEventData data)
+        where TEventData : class
+    {
+        lock (this.subscriptionLock)
         {
-            this.subscriptionLock = new object();
+            Type eventDataType = data.GetType();
+            if (this.subscriptions.TryGetValue(eventDataType, out var subscription))
+            {
+                return subscription.ToList();
+            }
         }
 
-        public IReadOnlyList<IEventSubscriptionBase> Retrieve<TEventData>(TEventData data)
-            where TEventData : class
+        return ReadOnlyList.Empty<IEventSubscriptionBase>();
+    }
+
+    public void Register(IEventSubscriptionBase instance)
+    {
+        IReadOnlyList<Type> eventDataTypes = RetrieveEventDataTypes(instance);
+        lock (this.subscriptionLock)
         {
-            lock (this.subscriptionLock)
+            foreach (Type eventDataType in eventDataTypes)
             {
-                Type eventDataType = data.GetType();
-                if (this.subscriptions.TryGetValue(eventDataType, out var subscription))
+                if (!this.subscriptions.ContainsKey(eventDataType))
                 {
-                    return subscription.ToList();
+                    this.subscriptions.Add(eventDataType, new List<IEventSubscriptionBase>());
                 }
+
+                this.subscriptions[eventDataType].Add(instance);
             }
-
-            return ReadOnlyList.Empty<IEventSubscriptionBase>();
         }
+    }
 
-        public void Register(IEventSubscriptionBase instance)
+    public void Unregister(IEventSubscriptionBase instance)
+    {
+        IReadOnlyList<Type> eventDataType = RetrieveEventDataTypes(instance);
+        lock (this.subscriptionLock)
         {
-            IReadOnlyList<Type> eventDataTypes = RetrieveEventDataTypes(instance);
-            lock (this.subscriptionLock)
-            {
-                foreach (Type eventDataType in eventDataTypes)
-                {
-                    if (!this.subscriptions.ContainsKey(eventDataType))
-                    {
-                        this.subscriptions.Add(eventDataType, new List<IEventSubscriptionBase>());
-                    }
-
-                    this.subscriptions[eventDataType].Add(instance);
-                }
-            }
+            eventDataType.ForEach(x => this.subscriptions[x].Remove(instance));
         }
+    }
 
-        public void Unregister(IEventSubscriptionBase instance)
+    private static IReadOnlyList<Type> RetrieveEventDataTypes(object instance)
+    {
+        List<Type> types = instance.GetType().GetInterfaces()
+            .Where(x => x is { IsGenericType: true, GenericTypeArguments.Length: 1 })
+            .Where(x => x.GetGenericTypeDefinition() == typeof(IEventSubscription<>) ||
+                        x.GetGenericTypeDefinition() == typeof(IEventSubscriptionAsync<>))
+            .SelectMany(x => x.GetGenericArguments())
+            .ToList();
+
+        if (types.Any())
         {
-            IReadOnlyList<Type> eventDataType = RetrieveEventDataTypes(instance);
-            lock (this.subscriptionLock)
-            {
-                eventDataType.ForEach(x => this.subscriptions[x].Remove(instance));
-            }
+            return types;
         }
 
-        private static IReadOnlyList<Type> RetrieveEventDataTypes(object instance)
-        {
-            List<Type> types = instance.GetType().GetInterfaces()
-                .Where(x => x.IsGenericType && x.GenericTypeArguments.Length == 1)
-                .Where(x => x.GetGenericTypeDefinition() == typeof(IEventSubscription<>) ||
-                            x.GetGenericTypeDefinition() == typeof(IEventSubscriptionAsync<>))
-                .SelectMany(x => x.GetGenericArguments())
-                .ToList();
-
-            if (types.Any())
-            {
-                return types;
-            }
-
-            throw new NotSupportedException(
-                "Registered class must implement IEventSubscription or IEventSubscriptionAsync");
-        }
+        throw new NotSupportedException(
+            "Registered class must implement IEventSubscription or IEventSubscriptionAsync");
     }
 }

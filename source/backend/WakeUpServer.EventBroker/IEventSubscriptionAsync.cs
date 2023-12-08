@@ -1,9 +1,8 @@
-﻿namespace WakeUpServer.EventBroker
-{
-    using System.Threading.Tasks;
+﻿namespace WakeUpServer.EventBroker;
 
-    public interface IEventSubscriptionAsync<in T> : IEventSubscriptionBase
-    {
-        Task HandleAsync(T data);
-    }
+using System.Threading.Tasks;
+
+public interface IEventSubscriptionAsync<in T> : IEventSubscriptionBase
+{
+    Task HandleAsync(T data);
 }

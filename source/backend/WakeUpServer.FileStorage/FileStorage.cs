@@ -2,73 +2,72 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using Newtonsoft.Json;
 
-namespace WakeUpServer.FileStorage
+namespace WakeUpServer.FileStorage;
+
+using System;
+using System.IO;
+
+internal class FileStorage : IFileStorage
 {
-    using System;
-    using System.IO;
+    private readonly string directory;
+    private readonly ConcurrentDictionary<string, object> fileLocks;
 
-    internal class FileStorage : IFileStorage
+    public FileStorage()
     {
-        private readonly string directory;
-        private readonly ConcurrentDictionary<string, object> fileLocks;
+        this.fileLocks = new ConcurrentDictionary<string, object>();
+        this.directory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "../Data");
+        this.EnsureDataDirectoryExists();
+    }
 
-        public FileStorage()
+    public T? Read<T>(string file)
+    {
+        string filePath = Path.Combine(this.directory, $"{file}.json");
+        lock (this.fileLocks.GetOrAdd(file, _ => new object()))
         {
-            this.fileLocks = new ConcurrentDictionary<string, object>();
-            this.directory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "../Data");
-            this.EnsureDataDirectoryExists();
-        }
-
-        public T? Read<T>(string file)
-        {
-            string filePath = Path.Combine(this.directory, $"{file}.json");
-            lock (this.fileLocks.GetOrAdd(file, _ => new object()))
+            if (!File.Exists(filePath))
             {
-                if (!File.Exists(filePath))
-                {
-                    return default;
-                }
-
-                string jsonResult = File.ReadAllText(filePath);
-                return JsonConvert.DeserializeObject<T>(jsonResult);
+                return default;
             }
+
+            string jsonResult = File.ReadAllText(filePath);
+            return JsonConvert.DeserializeObject<T>(jsonResult);
         }
+    }
 
-        public void Write<T>(T? data, string file)
+    public void Write<T>(T? data, string file)
+    {
+        string filePath = Path.Combine(this.directory, $"{file}.json");
+        lock (this.fileLocks.GetOrAdd(file, _ => new object()))
         {
-            string filePath = Path.Combine(this.directory, $"{file}.json");
-            lock (this.fileLocks.GetOrAdd(file, _ => new object()))
-            {
-                string jsonResult = JsonConvert.SerializeObject(data);
-                File.WriteAllText(filePath, jsonResult);
-            }
+            string jsonResult = JsonConvert.SerializeObject(data);
+            File.WriteAllText(filePath, jsonResult);
         }
+    }
 
-        public void Update<T>(string file, Action<T> updateAction)
-            where T : new()
+    public void Update<T>(string file, Action<T> updateAction)
+        where T : new()
+    {
+        string filePath = Path.Combine(this.directory, $"{file}.json");
+        lock (this.fileLocks.GetOrAdd(file, _ => new object()))
         {
-            string filePath = Path.Combine(this.directory, $"{file}.json");
-            lock (this.fileLocks.GetOrAdd(file, _ => new object()))
+            var data = new T();
+            if (File.Exists(filePath))
             {
-                var data = new T();
-                if (File.Exists(filePath))
-                {
-                    string content = File.ReadAllText(filePath);
-                    data = JsonConvert.DeserializeObject<T>(content)!;
-                }
-
-                updateAction(data);
-
-                File.WriteAllText(filePath, JsonConvert.SerializeObject(data));
+                string content = File.ReadAllText(filePath);
+                data = JsonConvert.DeserializeObject<T>(content)!;
             }
+
+            updateAction(data);
+
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(data));
         }
+    }
 
-        private void EnsureDataDirectoryExists()
+    private void EnsureDataDirectoryExists()
+    {
+        if (!Directory.Exists(this.directory))
         {
-            if (!Directory.Exists(this.directory))
-            {
-                Directory.CreateDirectory(this.directory);
-            }
+            Directory.CreateDirectory(this.directory);
         }
     }
 }

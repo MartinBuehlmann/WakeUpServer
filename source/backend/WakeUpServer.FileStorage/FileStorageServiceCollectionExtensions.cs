@@ -1,13 +1,12 @@
-namespace WakeUpServer.FileStorage
-{
-    using Microsoft.Extensions.DependencyInjection;
+namespace WakeUpServer.FileStorage;
 
-    public static class FileStorageServiceCollectionExtensions
+using Microsoft.Extensions.DependencyInjection;
+
+public static class FileStorageServiceCollectionExtensions
+{
+    public static IServiceCollection AddFileStorage(this IServiceCollection services)
     {
-        public static IServiceCollection AddFileStorage(this IServiceCollection services)
-        {
-            services.AddSingleton<IFileStorage, FileStorage>();
-            return services;
-        }
+        services.AddSingleton<IFileStorage, FileStorage>();
+        return services;
     }
 }

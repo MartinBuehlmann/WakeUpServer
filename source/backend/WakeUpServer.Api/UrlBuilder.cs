@@ -1,58 +1,57 @@
-﻿namespace WakeUpServer.Api
+﻿namespace WakeUpServer.Api;
+
+using System;
+using System.Text;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+
+public class UrlBuilder
 {
-    using System;
-    using System.Text;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc.Infrastructure;
+    private readonly IActionContextAccessor actionContextAccessor;
 
-    public class UrlBuilder
+    public UrlBuilder(IActionContextAccessor actionContextAccessor)
     {
-        private readonly IActionContextAccessor actionContextAccessor;
+        this.actionContextAccessor = actionContextAccessor;
+    }
 
-        public UrlBuilder(IActionContextAccessor actionContextAccessor)
+    public string Build(string routeName, string controller, string? resourceIdentifier = null)
+    {
+        const string ControllerAppendix = "Controller";
+        HttpContext httpContext = this.actionContextAccessor.ActionContext!.HttpContext;
+
+        var url = new StringBuilder()
+            .Append(httpContext.Request.Scheme)
+            .Append("://")
+            .Append(httpContext.Request.Host);
+
+        if (!string.IsNullOrEmpty(routeName))
         {
-            this.actionContextAccessor = actionContextAccessor;
+            url.Append('/');
+            url.Append(routeName);
         }
 
-        public string Build(string routeName, string controller, string? resourceIdentifier = null)
+        if (!string.IsNullOrEmpty(controller))
         {
-            const string ControllerAppendix = "Controller";
-            HttpContext httpContext = this.actionContextAccessor.ActionContext!.HttpContext;
-
-            var url = new StringBuilder()
-                .Append(httpContext.Request.Scheme)
-                .Append("://")
-                .Append(httpContext.Request.Host);
-
-            if (!string.IsNullOrEmpty(routeName))
+            if (controller.EndsWith(ControllerAppendix, StringComparison.OrdinalIgnoreCase))
             {
-                url.Append('/');
-                url.Append(routeName);
+                controller = controller.Substring(0, controller.Length - ControllerAppendix.Length);
             }
 
-            if (!string.IsNullOrEmpty(controller))
-            {
-                if (controller.EndsWith(ControllerAppendix, StringComparison.OrdinalIgnoreCase))
-                {
-                    controller = controller.Substring(0, controller.Length - ControllerAppendix.Length);
-                }
-
-                url.Append('/');
-                url.Append(controller);
-            }
-
-            if (resourceIdentifier != null)
-            {
-                url.Append('/');
-                url.Append(resourceIdentifier);
-            }
-
-            if (url.Length == 0)
-            {
-                url.Append('/');
-            }
-
-            return url.ToString();
+            url.Append('/');
+            url.Append(controller);
         }
+
+        if (resourceIdentifier != null)
+        {
+            url.Append('/');
+            url.Append(resourceIdentifier);
+        }
+
+        if (url.Length == 0)
+        {
+            url.Append('/');
+        }
+
+        return url.ToString();
     }
 }

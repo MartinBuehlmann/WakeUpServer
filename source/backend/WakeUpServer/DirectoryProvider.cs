@@ -1,60 +1,59 @@
-﻿namespace WakeUpServer
+﻿namespace WakeUpServer;
+
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+
+internal static class DirectoryProvider
 {
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
+    private static bool IsDebugBuild { get; set; }
 
-    internal static class DirectoryProvider
+    public static string ResolveContentDirectory()
     {
-        private static bool IsDebugBuild { get; set; }
+        CheckForDebugBuild();
 
-        public static string ResolveContentDirectory()
+        if (IsDebugBuild)
         {
-            CheckForDebugBuild();
+            return SearchWebDirectory(Directory.GetCurrentDirectory());
+        }
 
-            if (IsDebugBuild)
+        return ResolveSettingsDirectory();
+    }
+
+    private static string ResolveSettingsDirectory()
+    {
+        string? location = Assembly.GetEntryAssembly()?.Location;
+        string? contentDirectory = Path.GetDirectoryName(location);
+        if (!string.IsNullOrEmpty(contentDirectory) && Directory.GetDirectories(contentDirectory).Any(x => x.EndsWith("wwwroot", StringComparison.InvariantCulture)))
+        {
+            return contentDirectory;
+        }
+
+        return Directory.GetCurrentDirectory();
+    }
+
+    private static string SearchWebDirectory(string currentDirectory)
+    {
+        string directory = currentDirectory;
+
+        while (true)
+        {
+            string[] directories = Directory.GetDirectories(directory);
+            string? webDir = directories.SingleOrDefault(x => x.EndsWith("WakeUpServer.Web", StringComparison.InvariantCulture));
+            if (!string.IsNullOrEmpty(webDir))
             {
-                return SearchWebDirectory(Directory.GetCurrentDirectory());
+                return webDir;
             }
 
-            return ResolveSettingsDirectory();
+            directory = Directory.GetParent(directory)?.FullName!;
         }
+    }
 
-        private static string ResolveSettingsDirectory()
-        {
-            string? location = Assembly.GetEntryAssembly()?.Location;
-            string? contentDirectory = Path.GetDirectoryName(location);
-            if (!string.IsNullOrEmpty(contentDirectory) && Directory.GetDirectories(contentDirectory).Any(x => x.EndsWith("wwwroot", StringComparison.InvariantCulture)))
-            {
-                return contentDirectory;
-            }
-
-            return Directory.GetCurrentDirectory();
-        }
-
-        private static string SearchWebDirectory(string currentDirectory)
-        {
-            string directory = currentDirectory;
-
-            while (true)
-            {
-                string[] directories = Directory.GetDirectories(directory);
-                string? webDir = directories.SingleOrDefault(x => x.EndsWith("WakeUpServer.Web", StringComparison.InvariantCulture));
-                if (!string.IsNullOrEmpty(webDir))
-                {
-                    return webDir;
-                }
-
-                directory = Directory.GetParent(directory)?.FullName!;
-            }
-        }
-
-        [Conditional("DEBUG")]
-        private static void CheckForDebugBuild()
-        {
-            IsDebugBuild = true;
-        }
+    [Conditional("DEBUG")]
+    private static void CheckForDebugBuild()
+    {
+        IsDebugBuild = true;
     }
 }

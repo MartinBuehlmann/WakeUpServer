@@ -1,27 +1,26 @@
 ﻿using Autofac;
 using Autofac.Builder;
 
-namespace WakeUpServer.EventBroker.Autofac
+namespace WakeUpServer.EventBroker.Autofac;
+
+using System;
+
+public static class EventBrokerRegistrationExtensions
 {
-    using System;
-
-    public static class EventBrokerRegistrationExtensions
-    {
-        public static IRegistrationBuilder<TLimit, TActivatorData, TSingleRegistrationStyle>
-            RegisterOnEventBroker<TLimit, TActivatorData, TSingleRegistrationStyle>(
-                this IRegistrationBuilder<TLimit, TActivatorData, TSingleRegistrationStyle> registration)
-            where TSingleRegistrationStyle : SingleRegistrationStyle
-            => registration
-                .OnActivated(
-                    x =>
+    public static IRegistrationBuilder<TLimit, TActivatorData, TSingleRegistrationStyle>
+        RegisterOnEventBroker<TLimit, TActivatorData, TSingleRegistrationStyle>(
+            this IRegistrationBuilder<TLimit, TActivatorData, TSingleRegistrationStyle> registration)
+        where TSingleRegistrationStyle : SingleRegistrationStyle
+        => registration
+            .OnActivated(
+                x =>
+                {
+                    var subscription = x.Context.Resolve<IEventRegistration>();
+                    if (x.Instance == null)
                     {
-                        var subscription = x.Context.Resolve<IEventRegistration>();
-                        if (x.Instance == null)
-                        {
-                            throw new InvalidOperationException("Instance is null");
-                        }
+                        throw new InvalidOperationException("Instance is null");
+                    }
 
-                        subscription.Register((IEventSubscriptionBase) x.Instance);
-                    });
-    }
+                    subscription.Register((IEventSubscriptionBase)x.Instance);
+                });
 }

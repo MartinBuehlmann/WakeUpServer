@@ -1,6 +1,5 @@
-namespace WakeUpServer.Reporting.Domain
-{
-    using System.Collections.Generic;
+namespace WakeUpServer.Reporting.Domain;
 
-    public record ReportItem(string MacAddress, int WakeUpCount, IReadOnlyList<string> CallerIpAddresses);
-}
+using System.Collections.Generic;
+
+public record ReportItem(string MacAddress, int WakeUpCount, IReadOnlyList<string> CallerIpAddresses);

@@ -1,16 +1,15 @@
-namespace WakeUpServer.Common
-{
-    using System;
-    using System.Collections.Generic;
+namespace WakeUpServer.Common;
 
-    public static class EnumerableExtensions
+using System;
+using System.Collections.Generic;
+
+public static class EnumerableExtensions
+{
+    public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
     {
-        public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
+        foreach (T item in items)
         {
-            foreach (T item in items)
-            {
-                action(item);
-            }
+            action(item);
         }
     }
 }

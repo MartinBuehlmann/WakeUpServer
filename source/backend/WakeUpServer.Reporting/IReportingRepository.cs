@@ -1,13 +1,12 @@
 using WakeUpServer.Reporting.Domain;
 
-namespace WakeUpServer.Reporting
+namespace WakeUpServer.Reporting;
+
+using System;
+
+public interface IReportingRepository
 {
-    using System;
+    void AddWakeUpReport(string callingIpAddress, string macAddress, DateTimeOffset timeStamp);
 
-    public interface IReportingRepository
-    {
-        void AddWakeUpReport(string callingIpAddress, string macAddress, DateTimeOffset timeStamp);
-
-        MonthReportItem RetrieveMonthReport(int year, int month);
-    }
+    MonthReportItem RetrieveMonthReport(int year, int month);
 }

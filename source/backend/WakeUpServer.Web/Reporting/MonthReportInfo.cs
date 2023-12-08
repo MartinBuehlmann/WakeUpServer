@@ -1,6 +1,5 @@
-namespace WakeUpServer.Web.Reporting
-{
-    using System.Collections.Generic;
+namespace WakeUpServer.Web.Reporting;
 
-    public record MonthReportInfo(int Year, int Month, IReadOnlyList<ReportInfo> ReportItems);
-}
+using System.Collections.Generic;
+
+public record MonthReportInfo(int Year, int Month, IReadOnlyList<ReportInfo> ReportItems);

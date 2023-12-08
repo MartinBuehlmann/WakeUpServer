@@ -1,13 +1,12 @@
-namespace WakeUpServer.Common
-{
-    using Microsoft.Extensions.DependencyInjection;
+namespace WakeUpServer.Common;
 
-    public static class CommonServiceCollectionExtensions
+using Microsoft.Extensions.DependencyInjection;
+
+public static class CommonServiceCollectionExtensions
+{
+    public static IServiceCollection AddCommon(this IServiceCollection services)
     {
-        public static IServiceCollection AddCommon(this IServiceCollection services)
-        {
-            services.AddTransient<ApplicationCrasher>();
-            return services;
-        }
+        services.AddTransient<ApplicationCrasher>();
+        return services;
     }
 }
