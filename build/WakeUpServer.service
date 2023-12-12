@@ -1,0 +1,14 @@
+[Unit]
+Description=WakeUpServer
+After=nginx.service
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/WakeUpServer/bin
+ExecStart=/home/pi/WakeUpServer/bin/WakeUpServer
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

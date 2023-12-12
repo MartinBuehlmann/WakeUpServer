@@ -1,0 +1,1 @@
+cd ./../source/backenddotnet publish WakeUpServer -c Release -r linux-arm --self-contained -o ../../artifacts/publish/linux/ /p:DebugType=None /p:DebugSymbols=false
