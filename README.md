@@ -21,5 +21,7 @@ Just send the computers MAC address in the body of the request.
 ### Reporting UI
 The service provides a little (and ugly) Angular frontend with monthly reporting.
 
+The reporting UI is currently built with Kendo UI and so requires a valid license. Create an environment variable called KENDO_UI_LICENSE and set its value to the license key.
+
 ### Swagger Support
 All APIs can be accessed and tried out by Swagger. Just use the IP address of the server and add /swagger.
