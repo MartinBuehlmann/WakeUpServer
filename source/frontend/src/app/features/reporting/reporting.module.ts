@@ -3,6 +3,7 @@ import { ReportingService } from "./services/reporting-service";
 import { MonthlyUsageComponent } from './monthly-usage/monthly-usage.component';
 import { ChartModule } from "@progress/kendo-angular-charts";
 import { DateInputsModule } from "@progress/kendo-angular-dateinputs";
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
     providers: [
@@ -13,8 +14,9 @@ import { DateInputsModule } from "@progress/kendo-angular-dateinputs";
     ],
     imports: [
       ChartModule,
-      DateInputsModule
-      ],
+      DateInputsModule,
+      NgChartsModule,
+    ],
       exports: [
         MonthlyUsageComponent
       ]
