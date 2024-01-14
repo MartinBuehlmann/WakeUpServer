@@ -1,34 +1,14 @@
-<canvas baseChart
-    class="chart"
-    style="height: 300px; max-height: 300px;"
-    [data]="reportingData"
-    [options]="chartOptions"
-    [type]="doughnutChartType">
-</canvas>
+<div style="text-align: center;">
+    <div style="font-size: 24px;">WakeUp Server Usages: {{totalWakeUpCount}}</div>
+    <canvas baseChart
+        class="chart"
+        style="height: 300px; max-height: 300px;"
+        [data]="reportingData"
+        [options]="chartOptions"
+        [type]="chartType">
+    </canvas>
+</div>
 
-
-<kendo-chart>
-    <kendo-chart-legend
-        position="bottom" 
-        orientation="vertical">
-    </kendo-chart-legend>
-    <kendo-chart-series>
-        <kendo-chart-series-item
-            type="donut"
-            [data]="reportingItems"
-            field="wakeUpCount"
-            categoryField="macAddress">
-            <kendo-chart-series-item-labels
-                [content]="labelContent"
-                color="#fff"
-                background="none">
-            </kendo-chart-series-item-labels>
-        </kendo-chart-series-item>
-        <ng-template kendoChartDonutCenterTemplate>
-            <h3>{{totalWakeUpCount}}</h3>
-          </ng-template>
-    </kendo-chart-series>
-</kendo-chart>
 <kendo-datepicker
     [(value)]="selectedMonth"
     (valueChange)="onSelectedMonthChange($event)"

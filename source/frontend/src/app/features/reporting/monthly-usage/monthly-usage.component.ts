@@ -5,7 +5,6 @@ import { Component, OnInit } from '@angular/core';
 import { LegendLabelsContentArgs } from '@progress/kendo-angular-charts';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { MonthlyReport } from '../services/models/monthly-report.model';
-import { ReportItem } from '../services/models/report-item.model';
 import { ReportingService } from '../services/reporting-service';
 import { ChartConfiguration, ChartData } from 'chart.js';
 
@@ -16,20 +15,19 @@ import { ChartConfiguration, ChartData } from 'chart.js';
 })
 export class MonthlyUsageComponent implements OnInit {
   public reportingData: ChartData<'doughnut'> | undefined;
-  public doughnutChartType: ChartConfiguration<'doughnut'>['type'] = 'doughnut';
+  public chartType: ChartConfiguration<'doughnut'>['type'] = 'doughnut';
   public chartOptions: ChartConfiguration<'doughnut'>['options'] = {
-    responsive: true,
-    plugins: {
+     responsive: true,
+     plugins: {
       legend: {
         display: true,
         position: "bottom",
         align: "center",
       },
-    },
-    cutout: '40%',
-  }; 
+     },
+     cutout: 60 
+   };
 
-  public reportingItems: ReportItem[] = [];
   public totalWakeUpCount: number = 0;
   public selectedMonth: Date;
 
@@ -58,15 +56,15 @@ export class MonthlyUsageComponent implements OnInit {
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
         next: (res) => {
-          this.reportingItems = res.reportItems;
-          this.totalWakeUpCount = this.reportingItems.map(item => item.wakeUpCount).reduce((sum, current) => sum + current)
-          console.log(this.reportingItems);
+          let reportingItems = res.reportItems;
+          this.totalWakeUpCount = reportingItems.map(item => item.wakeUpCount).reduce((sum, current) => sum + current)
+          console.log(reportingItems);
 
-          if (this.reportingItems.length > 0) {
+          if (reportingItems.length > 0) {
             this.reportingData = {
-              labels: this.reportingItems.map(x => x.macAddress),
+              labels: reportingItems.map(x => x.macAddress),
               datasets: [
-                { data: this.reportingItems.map(x => x.wakeUpCount) },
+                { data: reportingItems.map(x => x.wakeUpCount) },
               ]
             }
           }
