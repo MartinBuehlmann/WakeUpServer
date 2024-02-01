@@ -44,7 +44,7 @@ export class MonthlyUsageComponent implements OnInit {
       const centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2);
 
       ctx.font = '24px Arial';
-      ctx.fillStyle = 'black';
+      ctx.fillStyle = 'white';
 
       // Draw text in center
       if (totalWakeUpCount > 0) {
