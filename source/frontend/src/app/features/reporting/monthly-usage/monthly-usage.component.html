@@ -8,12 +8,14 @@
         [plugins]="chartPlugins"
         [type]="chartType">
     </canvas>
-</div>
 
-<kendo-datepicker
-    [(value)]="selectedMonth"
-    (valueChange)="onSelectedMonthChange($event)"
-    bottomView="year"
-    topView="decade"
-    format="MMMM yyyy">
-</kendo-datepicker>
+    <p-calendar 
+        [(ngModel)]="selectedMonth"
+        [iconDisplay]="'input'"
+        [showIcon]="true"
+        view="month"
+        dateFormat="MM yy"
+        [readonlyInput]="true"
+        (onSelect)="onSelectedMonthChange(selectedMonth)">
+    </p-calendar>
+</div>

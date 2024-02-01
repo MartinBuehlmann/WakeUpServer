@@ -65,7 +65,7 @@ export class MonthlyUsageComponent implements OnInit {
     this.updateChart();
   }
 
-  public onSelectedMonthChange(value: Date): void {
+  onSelectedMonthChange(value: Date): void {
     this.updateChart();
   }
 
@@ -74,7 +74,7 @@ export class MonthlyUsageComponent implements OnInit {
     monthlyReport$
       .pipe(takeUntil(this.destroyed$))
       .subscribe({
-        next: (res) => {
+        next: (res: MonthlyReport) => {
           let reportingItems = res.reportItems;
 
           if (reportingItems.length > 0) {
