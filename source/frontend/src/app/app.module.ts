@@ -19,7 +19,7 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    ReportingModule
+    ReportingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

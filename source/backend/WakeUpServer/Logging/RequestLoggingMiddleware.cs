@@ -22,7 +22,8 @@ public class RequestLoggingMiddleware
     {
         if (httpContext.Request.Path.HasValue &&
             httpContext.Request.ContentType != null &&
-            httpContext.Request.ContentType.Contains(MediaTypeNames.Application.Json,
+            httpContext.Request.ContentType.Contains(
+                MediaTypeNames.Application.Json,
                 StringComparison.InvariantCulture))
         {
             httpContext.Request.EnableBuffering();
@@ -34,9 +35,7 @@ public class RequestLoggingMiddleware
                 "Request {Method} {Path} with Payload: {Payload}",
                 httpContext.Request.Method,
                 httpContext.Request.Path.Value,
-                !httpContext.Request.Path.Value.Contains("Login", StringComparison.InvariantCultureIgnoreCase)
-                    ? payload
-                    : "[login data]");
+                !httpContext.Request.Path.Value.Contains("Login", StringComparison.InvariantCultureIgnoreCase) ? payload : "[login data]");
         }
 
         await this.next(httpContext);
