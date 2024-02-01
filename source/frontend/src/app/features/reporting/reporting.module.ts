@@ -1,8 +1,9 @@
 import { NgModule } from "@angular/core";
+import { FormsModule } from '@angular/forms';
 import { ReportingService } from "./services/reporting-service";
 import { MonthlyUsageComponent } from './monthly-usage/monthly-usage.component';
-import { ChartModule } from "@progress/kendo-angular-charts";
-import { DateInputsModule } from "@progress/kendo-angular-dateinputs";
+import { NgChartsModule } from 'ng2-charts';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
     providers: [
@@ -12,9 +13,10 @@ import { DateInputsModule } from "@progress/kendo-angular-dateinputs";
       MonthlyUsageComponent
     ],
     imports: [
-      ChartModule,
-      DateInputsModule
-      ],
+      FormsModule,
+      NgChartsModule,
+      CalendarModule,
+    ],
       exports: [
         MonthlyUsageComponent
       ]

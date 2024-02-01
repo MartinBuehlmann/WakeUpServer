@@ -7,7 +7,7 @@ rd ..\artifacts /s /q
 
 REM Angular
 cd frontend
-npm run build
+call npm run build
 cd ..
 
 REM .NET
