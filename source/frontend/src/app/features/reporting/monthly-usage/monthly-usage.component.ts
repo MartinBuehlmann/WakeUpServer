@@ -22,6 +22,9 @@ export class MonthlyUsageComponent implements OnInit {
         display: true,
         position: "bottom",
         align: "center",
+        labels: {
+          color: 'white',
+        }
       },
      },
      cutout: 60 

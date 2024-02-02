@@ -1,11 +1,20 @@
+.reporting {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .title {
     font-size: 24px;
-    margin-top: 0px;
-    margin-bottom: 10px;
+}
+
+.chartcontainer {
+    width: 380px;
 }
 
 .chart {
-    height: 300px; 
-    max-height: 300px;
-    margin: 10px;
+    height: 350px; 
+    max-height: 350px;
+    margin: 30px;
 }
