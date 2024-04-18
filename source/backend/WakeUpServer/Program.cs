@@ -10,7 +10,7 @@ using Serilog;
 using Serilog.Events;
 using WakeUpServer.BackgroundServices;
 
-public class Program
+public static class Program
 {
     public static void Main(string[] args)
     {
