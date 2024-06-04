@@ -9,23 +9,19 @@ import { HomeComponent } from './features/home/home.component';
 import 'hammerjs';
 import { FooterComponent } from './footer/footer.component';
 import { ReportingModule } from './features/reporting/reporting.module';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    HomeComponent,
-    FooterComponent,
-  ],
-  imports: [
-    AppRoutingModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    ReportingModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
+    declarations: [
+        AppComponent,
+        HeaderComponent,
+        HomeComponent,
+        FooterComponent,
+    ],
+    bootstrap: [AppComponent],
+    imports: [
+        AppRoutingModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        ReportingModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
