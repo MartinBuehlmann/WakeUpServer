@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './features/home/home.component';
-import 'hammerjs';
 import { FooterComponent } from './footer/footer.component';
 import { ReportingModule } from './features/reporting/reporting.module';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
