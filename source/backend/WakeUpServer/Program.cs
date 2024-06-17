@@ -10,7 +10,7 @@ using Serilog;
 using Serilog.Events;
 using WakeUpServer.BackgroundServices;
 
-public class Program
+public static class Program
 {
     public static void Main(string[] args)
     {
@@ -38,7 +38,7 @@ public class Program
 
     private static IHostBuilder CreateHostBuilder(string[] args)
     {
-        string contentDirectory = $"{DirectoryProvider.ResolveContentDirectory()}/wwwroot";
+        string contentDirectory = $"{DirectoryProvider.ResolveContentDirectory()}/wwwroot/browser";
         Log.Information("Setting the web root directory to '{ContentDirectory}'", contentDirectory);
 
         return Host.CreateDefaultBuilder(args)
