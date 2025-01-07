@@ -1,5 +1,6 @@
 ﻿namespace WakeUpServer;
 
+using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +32,7 @@ public class Startup
             c.SwaggerDoc("api", new OpenApiInfo { Title = "WakeUpServer API" });
             c.SwaggerDoc("web", new OpenApiInfo { Title = "WakeUpServer WEB" });
             c.ResolveConflictingActions(x => x.First());
+            c.IncludeXmlComments(Path.Combine(System.AppContext.BaseDirectory, "WakeUpServer.Api.xml"));
         });
 
         services.Configure<ForwardedHeadersOptions>(options =>
