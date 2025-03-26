@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using WakeUpServer.Logging;
@@ -63,13 +64,14 @@ public class Startup
 
         app.UseSwagger(o =>
         {
-            o.RouteTemplate = "swagger/{documentName}/swagger.json";
-            o.SerializeAsV2 = true;
+            o.RouteTemplate = "swagger/{documentName}/swagger_v3.json";
+            o.OpenApiVersion = OpenApiSpecVersion.OpenApi3_0;
         });
+
         app.UseSwaggerUI(c =>
         {
-            c.SwaggerEndpoint("/swagger/api/swagger.json", "WakeUpServer API");
-            c.SwaggerEndpoint("/swagger/web/swagger.json", "WakeUpServer WEB");
+            c.SwaggerEndpoint("/swagger/api/swagger_v3.json", "WakeUpServer API");
+            c.SwaggerEndpoint("/swagger/web/swagger_v3.json", "WakeUpServer WEB");
             c.RoutePrefix = "swagger";
             c.DisplayRequestDuration();
         });
