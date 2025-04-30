@@ -1,7 +1,17 @@
 ﻿[*.cs]
 
 # SA0001: XML comment analysis disabled
-dotnet_diagnostic.SA0001.severity = none
+# dotnet_diagnostic rules are supported
+dotnet_diagnostic.CA1062.severity = none
+dotnet_diagnostic.CA1812.severity = none
+dotnet_diagnostic.CA1822.severity = none
+dotnet_diagnostic.CA1852.severity = none
+dotnet_diagnostic.CA1860.severity = none
+dotnet_diagnostic.CA2007.severity = none
+dotnet_diagnostic.sa0001.severity = none
+dotnet_diagnostic.sa1118.severity = none
+dotnet_diagnostic.sa1600.severity = none
+dotnet_diagnostic.sa1633.severity = none
 
 [*.cs]
 #### Benennungsstile ####
@@ -61,56 +71,7 @@ csharp_style_expression_bodied_lambdas = true:silent
 csharp_style_expression_bodied_local_functions = false:silent
 csharp_indent_labels = one_less_than_current
 csharp_style_unused_value_expression_statement_preference = discard_variable:silent
-dotnet_diagnostic.SA1600.severity = silent
-dotnet_diagnostic.SA1633.severity = silent
 
-[*.vb]
-#### Benennungsstile ####
-
-# Benennungsregeln
-
-dotnet_naming_rule.interface_should_be_beginnt_mit_i.severity = suggestion
-dotnet_naming_rule.interface_should_be_beginnt_mit_i.symbols = interface
-dotnet_naming_rule.interface_should_be_beginnt_mit_i.style = beginnt_mit_i
-
-dotnet_naming_rule.typen_should_be_pascal_schreibweise.severity = suggestion
-dotnet_naming_rule.typen_should_be_pascal_schreibweise.symbols = typen
-dotnet_naming_rule.typen_should_be_pascal_schreibweise.style = pascal_schreibweise
-
-dotnet_naming_rule.nicht_feldmember_should_be_pascal_schreibweise.severity = suggestion
-dotnet_naming_rule.nicht_feldmember_should_be_pascal_schreibweise.symbols = nicht_feldmember
-dotnet_naming_rule.nicht_feldmember_should_be_pascal_schreibweise.style = pascal_schreibweise
-
-# Symbolspezifikationen
-
-dotnet_naming_symbols.interface.applicable_kinds = interface
-dotnet_naming_symbols.interface.applicable_accessibilities = public, friend, private, protected, protected_friend, private_protected
-dotnet_naming_symbols.interface.required_modifiers = 
-
-dotnet_naming_symbols.typen.applicable_kinds = class, struct, interface, enum
-dotnet_naming_symbols.typen.applicable_accessibilities = public, friend, private, protected, protected_friend, private_protected
-dotnet_naming_symbols.typen.required_modifiers = 
-
-dotnet_naming_symbols.nicht_feldmember.applicable_kinds = property, event, method
-dotnet_naming_symbols.nicht_feldmember.applicable_accessibilities = public, friend, private, protected, protected_friend, private_protected
-dotnet_naming_symbols.nicht_feldmember.required_modifiers = 
-
-# Benennungsstile
-
-dotnet_naming_style.beginnt_mit_i.required_prefix = I
-dotnet_naming_style.beginnt_mit_i.required_suffix = 
-dotnet_naming_style.beginnt_mit_i.word_separator = 
-dotnet_naming_style.beginnt_mit_i.capitalization = pascal_case
-
-dotnet_naming_style.pascal_schreibweise.required_prefix = 
-dotnet_naming_style.pascal_schreibweise.required_suffix = 
-dotnet_naming_style.pascal_schreibweise.word_separator = 
-dotnet_naming_style.pascal_schreibweise.capitalization = pascal_case
-
-dotnet_naming_style.pascal_schreibweise.required_prefix = 
-dotnet_naming_style.pascal_schreibweise.required_suffix = 
-dotnet_naming_style.pascal_schreibweise.word_separator = 
-dotnet_naming_style.pascal_schreibweise.capitalization = pascal_case
 
 [*.{cs,vb}]
 dotnet_style_coalesce_expression = true:suggestion

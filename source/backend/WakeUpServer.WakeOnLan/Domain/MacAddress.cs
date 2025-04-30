@@ -1,5 +1,7 @@
 namespace WakeUpServer.WakeOnLan.Domain;
 
+using System.Globalization;
+
 public class MacAddress
 {
     private MacAddress(string macAddress)
@@ -10,5 +12,5 @@ public class MacAddress
     public string Value { get; }
 
     public static MacAddress FromString(string macAddress)
-        => new MacAddress(macAddress.ToUpper());
+        => new MacAddress(macAddress.ToUpper(CultureInfo.InvariantCulture));
 }

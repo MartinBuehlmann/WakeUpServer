@@ -1,6 +1,7 @@
 ﻿namespace WakeUpServer;
 
 using System;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +28,7 @@ public static class Program
                 retainedFileCountLimit: 10,
                 rollOnFileSizeLimit: true,
                 shared: true,
+                formatProvider: CultureInfo.InvariantCulture,
                 flushToDiskInterval: TimeSpan.FromSeconds(1))
             .CreateLogger();
 

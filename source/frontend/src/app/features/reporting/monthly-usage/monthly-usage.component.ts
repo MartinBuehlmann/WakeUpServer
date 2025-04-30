@@ -8,9 +8,10 @@ import { ReportingService } from '../services/reporting-service';
 import { ChartConfiguration, ChartData } from 'chart.js';
 
 @Component({
-  selector: 'app-reporting-monthly-usage',
-  templateUrl: './monthly-usage.component.html',
-  styleUrls: ['./monthly-usage.component.scss']
+    selector: 'app-reporting-monthly-usage',
+    templateUrl: './monthly-usage.component.html',
+    styleUrls: ['./monthly-usage.component.scss'],
+    standalone: false
 })
 export class MonthlyUsageComponent implements OnInit {
   public reportingData: ChartData<'doughnut'> | undefined;
