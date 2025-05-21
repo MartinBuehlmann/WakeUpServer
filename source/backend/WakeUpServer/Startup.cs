@@ -13,7 +13,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using WakeUpServer.Logging;
 
-public class Startup
+internal class Startup
 {
     public Startup(IConfiguration configuration)
     {

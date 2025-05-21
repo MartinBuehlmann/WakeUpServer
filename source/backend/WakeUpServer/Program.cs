@@ -11,7 +11,7 @@ using Serilog;
 using Serilog.Events;
 using WakeUpServer.BackgroundServices;
 
-public static class Program
+internal static class Program
 {
     public static void Main(string[] args)
     {
@@ -19,7 +19,7 @@ public static class Program
             .MinimumLevel.Debug()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .Enrich.FromLogContext()
-            .WriteTo.Console()
+            .WriteTo.Console(formatProvider: CultureInfo.InvariantCulture)
             .WriteTo.File(
                 "./../logs/WakeUpServer-.log",
                 rollingInterval: RollingInterval.Day,
