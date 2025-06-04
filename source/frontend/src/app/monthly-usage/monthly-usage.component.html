@@ -1,0 +1,25 @@
+<div class="reporting">
+    <div>
+        <div class="title">Usages</div>
+        
+        <div class="chartcontainer">
+            <canvas baseChart
+                class="chart"
+                [data]="reportingData"
+                [options]="chartOptions"
+                [plugins]="chartPlugins"
+                [type]="chartType">
+            </canvas>
+        </div>
+
+        <p-datepicker
+            [(ngModel)]="selectedMonth"
+            [iconDisplay]="'input'"
+            [showIcon]="true"
+            view="month"
+            dateFormat="MM yy"
+            [readonlyInput]="true"
+            (onSelect)="onSelectedMonthChange(selectedMonth)">
+        </p-datepicker>
+    </div>
+</div>
