@@ -45,7 +45,7 @@ internal class FileStorage : IFileStorage
     public async Task WriteAsync<T>(T? data, string file)
     {
         string filePath = Path.Combine(this.directory, $"{file}.json");
-        var semaphore = this.fileLocks.GetOrAdd(filePath, new SemaphoreSlim(1, 1));
+        SemaphoreSlim semaphore = this.fileLocks.GetOrAdd(filePath, new SemaphoreSlim(1, 1));
         await semaphore.WaitAsync();
         try
         {
@@ -62,7 +62,7 @@ internal class FileStorage : IFileStorage
         where T : new()
     {
         string filePath = Path.Combine(this.directory, $"{file}.json");
-        var semaphore = this.fileLocks.GetOrAdd(filePath, new SemaphoreSlim(1, 1));
+        SemaphoreSlim semaphore = this.fileLocks.GetOrAdd(filePath, new SemaphoreSlim(1, 1));
         await semaphore.WaitAsync();
         try
         {

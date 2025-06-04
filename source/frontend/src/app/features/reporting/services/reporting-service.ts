@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { map, Observable, shareReplay } from "rxjs";
+import { map, Observable, of } from "rxjs";
 import { MonthlyReport } from "./models/monthly-report.model";
 
 @Injectable()

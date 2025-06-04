@@ -1,6 +1,7 @@
 ﻿namespace WakeUpServer;
 
 using System;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
@@ -10,7 +11,7 @@ using Serilog;
 using Serilog.Events;
 using WakeUpServer.BackgroundServices;
 
-public static class Program
+internal static class Program
 {
     public static void Main(string[] args)
     {
@@ -18,7 +19,7 @@ public static class Program
             .MinimumLevel.Debug()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .Enrich.FromLogContext()
-            .WriteTo.Console()
+            .WriteTo.Console(formatProvider: CultureInfo.InvariantCulture)
             .WriteTo.File(
                 "./../logs/WakeUpServer-.log",
                 rollingInterval: RollingInterval.Day,
@@ -27,6 +28,7 @@ public static class Program
                 retainedFileCountLimit: 10,
                 rollOnFileSizeLimit: true,
                 shared: true,
+                formatProvider: CultureInfo.InvariantCulture,
                 flushToDiskInterval: TimeSpan.FromSeconds(1))
             .CreateLogger();
 

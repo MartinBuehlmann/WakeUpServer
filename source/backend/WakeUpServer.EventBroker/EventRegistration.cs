@@ -3,19 +3,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using WakeUpServer.Common;
 
 internal class EventRegistration : IEventRegistration
 {
-    private readonly object subscriptionLock;
+    private readonly Lock subscriptionLock = new();
 
-    private readonly IDictionary<Type, List<IEventSubscriptionBase>> subscriptions =
-        new Dictionary<Type, List<IEventSubscriptionBase>>();
-
-    public EventRegistration()
-    {
-        this.subscriptionLock = new object();
-    }
+    private readonly Dictionary<Type, List<IEventSubscriptionBase>> subscriptions = new();
 
     public IReadOnlyList<IEventSubscriptionBase> Retrieve<TEventData>(TEventData data)
         where TEventData : class
@@ -39,12 +34,13 @@ internal class EventRegistration : IEventRegistration
         {
             foreach (Type eventDataType in eventDataTypes)
             {
-                if (!this.subscriptions.ContainsKey(eventDataType))
+                if (!this.subscriptions.TryGetValue(eventDataType, out List<IEventSubscriptionBase>? value))
                 {
-                    this.subscriptions.Add(eventDataType, new List<IEventSubscriptionBase>());
+                    value = new List<IEventSubscriptionBase>();
+                    this.subscriptions.Add(eventDataType, value);
                 }
 
-                this.subscriptions[eventDataType].Add(instance);
+                value.Add(instance);
             }
         }
     }
@@ -58,7 +54,7 @@ internal class EventRegistration : IEventRegistration
         }
     }
 
-    private static IReadOnlyList<Type> RetrieveEventDataTypes(object instance)
+    private static List<Type> RetrieveEventDataTypes(object instance)
     {
         List<Type> types = instance.GetType().GetInterfaces()
             .Where(x => x is { IsGenericType: true, GenericTypeArguments.Length: 1 })

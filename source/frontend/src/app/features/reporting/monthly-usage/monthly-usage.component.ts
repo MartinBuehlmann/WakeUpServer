@@ -1,16 +1,18 @@
-// Documentation: Chart.js
-// https://www.chartjs.org/docs/latest/charts/doughnut.html
-
 import { Component, OnInit } from '@angular/core';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { MonthlyReport } from '../services/models/monthly-report.model';
 import { ReportingService } from '../services/reporting-service';
 import { ChartConfiguration, ChartData } from 'chart.js';
+import { DatePickerModule } from 'primeng/datepicker'
+import { BaseChartDirective } from 'ng2-charts';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-reporting-monthly-usage',
+  selector: 'app-monthly-usage',
+  imports: [DatePickerModule, BaseChartDirective, FormsModule],
+  providers: [ReportingService],
   templateUrl: './monthly-usage.component.html',
-  styleUrls: ['./monthly-usage.component.scss']
+  styleUrl: './monthly-usage.component.scss'
 })
 export class MonthlyUsageComponent implements OnInit {
   public reportingData: ChartData<'doughnut'> | undefined;

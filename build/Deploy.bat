@@ -12,7 +12,7 @@ cd ..
 
 REM .NET
 cd backend
-dotnet publish WakeUpServer -c Release -r linux-arm --self-contained -o ../../artifacts/publish/raspberry /p:DebugType=None /p:DebugSymbols=false
+dotnet publish WakeUpServer -c Release -r linux-arm64 --self-contained -o ../../artifacts/publish/raspberry /p:DebugType=None /p:DebugSymbols=false
 
 REM Publish
 plink -ssh pi@%address% -pw %password% -no-antispoof "sudo systemctl stop WakeUpServer"

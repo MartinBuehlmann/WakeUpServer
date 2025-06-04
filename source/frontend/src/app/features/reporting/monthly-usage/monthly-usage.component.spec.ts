@@ -8,7 +8,7 @@ describe('MonthlyUsageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MonthlyUsageComponent ]
+      imports: [MonthlyUsageComponent]
     })
     .compileComponents();
 
