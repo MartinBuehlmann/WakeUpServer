@@ -8,12 +8,12 @@ using WakeUpServer.Common;
 
 internal class EventBroker : IEventBroker
 {
-    private readonly IEventRegistration registration;
+    private readonly EventRegistration registration;
     private readonly ApplicationCrasher applicationCrasher;
     private int eventCount;
 
     public EventBroker(
-        IEventRegistration registration,
+        EventRegistration registration,
         ApplicationCrasher applicationCrasher)
     {
         this.registration = registration;
@@ -25,7 +25,7 @@ internal class EventBroker : IEventBroker
     public void Publish<T>(T data)
         where T : class
     {
-        foreach (IEventSubscriptionBase subscription in ((EventRegistration) this.registration).Retrieve(data))
+        foreach (IEventSubscriptionBase subscription in this.registration.Retrieve(data))
         {
             this.FireAndForgetEvent(data, subscription);
         }
