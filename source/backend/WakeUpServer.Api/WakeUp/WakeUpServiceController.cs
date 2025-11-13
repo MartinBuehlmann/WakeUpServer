@@ -1,6 +1,7 @@
 ﻿namespace WakeUpServer.Api.WakeUp;
 
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WakeUpServer.EventBroker;
@@ -10,14 +11,14 @@ using WakeUpServer.WakeOnLan.Domain;
 
 public class WakeUpServiceController : ApiController
 {
-    private readonly IWakeOnLanService wakeOnLanServiceService;
+    private readonly IWakeOnLanService wakeOnLanService;
     private readonly IEventBroker eventBroker;
 
     public WakeUpServiceController(
-        IWakeOnLanService wakeOnLanServiceService,
+        IWakeOnLanService wakeOnLanService,
         IEventBroker eventBroker)
     {
-        this.wakeOnLanServiceService = wakeOnLanServiceService;
+        this.wakeOnLanService = wakeOnLanService;
         this.eventBroker = eventBroker;
     }
 
@@ -28,10 +29,10 @@ public class WakeUpServiceController : ApiController
     /// <param name="macAddressInfo">MAC address of the computer to wake up.</param>
     /// <returns>HTTP status code 200 (OK) if call was successful.</returns>
     [HttpPut]
-    public async Task<IActionResult> WakeUpAsync([FromBody] MacAddressInfo macAddressInfo)
+    public async Task<IActionResult> WakeUpAsync([FromBody, Required] MacAddressInfo macAddressInfo)
     {
         MacAddress macAddress = MacAddress.FromString(macAddressInfo.MacAddress);
-        await this.wakeOnLanServiceService.WakeOnLanAsync(macAddress);
+        await this.wakeOnLanService.WakeOnLanAsync(macAddress);
         this.eventBroker.Publish(
             new WakeUpEvent(
                 this.HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty,
