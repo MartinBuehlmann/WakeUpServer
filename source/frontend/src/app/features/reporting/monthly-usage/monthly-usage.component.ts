@@ -3,13 +3,12 @@ import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { MonthlyReport } from '../services/models/monthly-report.model';
 import { ReportingService } from '../services/reporting-service';
 import { ChartConfiguration, ChartData } from 'chart.js';
-import { DatePickerModule } from 'primeng/datepicker'
 import { BaseChartDirective } from 'ng2-charts';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-monthly-usage',
-  imports: [DatePickerModule, BaseChartDirective, FormsModule],
+  imports: [BaseChartDirective, FormsModule],
   providers: [ReportingService],
   templateUrl: './monthly-usage.component.html',
   styleUrl: './monthly-usage.component.scss'
@@ -58,24 +57,41 @@ export class MonthlyUsageComponent implements OnInit {
     }
   }];
 
-  public selectedMonth: Date;
+  // format: yyyy-MM (used with <input type="month">)
+  public selectedMonth: string;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(0);
 
   constructor(private reportingService : ReportingService) {
-    this.selectedMonth = new Date();
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    this.selectedMonth = `${yyyy}-${mm}`;
   }
 
   ngOnInit(): void {
     this.updateChart();
   }
 
-  onSelectedMonthChange(value: Date): void {
+  onSelectedMonthChange(value: string): void {
+    // value is yyyy-MM from the input
+    this.selectedMonth = value;
     this.updateChart();
   }
 
   private updateChart(): void {
-    let monthlyReport$: Observable<MonthlyReport> = this.reportingService.getMonthlyReport(this.selectedMonth.getFullYear(), this.selectedMonth.getMonth() + 1);
+    // parse selectedMonth which is in the format yyyy-MM
+    let year = new Date().getFullYear();
+    let month = new Date().getMonth() + 1;
+    if (this.selectedMonth) {
+      const parts = this.selectedMonth.split('-');
+      if (parts.length === 2) {
+        year = Number(parts[0]);
+        month = Number(parts[1]);
+      }
+    }
+
+    let monthlyReport$: Observable<MonthlyReport> = this.reportingService.getMonthlyReport(year, month);
     monthlyReport$
       .pipe(takeUntil(this.destroyed$))
       .subscribe({

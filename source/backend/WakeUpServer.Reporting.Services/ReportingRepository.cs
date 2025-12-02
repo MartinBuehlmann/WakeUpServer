@@ -36,7 +36,7 @@ internal class ReportingRepository : IReportingRepository
         var wakeUpCalls = await this.fileStorage.ReadAsync<WakeUpCalls>(
             this.wakeUpCallsFileNameBuilder.Build(
                 new DateTimeOffset(
-                    new DateTime(year, month, 1))));
+                    new DateTime(year, month, 1), TimeSpan.Zero)));
 
         return this.monthReportCreator.Create(year, month, wakeUpCalls);
     }

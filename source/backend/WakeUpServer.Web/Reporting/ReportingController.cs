@@ -1,7 +1,10 @@
 ﻿namespace WakeUpServer.Web.Reporting;
 
+using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WakeUpServer.Reporting;
 using WakeUpServer.Reporting.Domain;
@@ -16,7 +19,9 @@ public class ReportingController : WebController
     }
 
     [HttpGet("{year:int}/{month:int}")]
-    public async Task<MonthReportInfo> RetrieveMonthlyReportAsync(int year, int month)
+    [ProducesResponseType(typeof(MonthReportInfo), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<MonthReportInfo> RetrieveMonthlyReportAsync([Range(1, 9999)] int year, [Range(1, 12)] int month)
     {
         MonthReportItem monthlyReportItem = await this.reportingRepository.RetrieveMonthReportAsync(year, month);
 
@@ -25,6 +30,6 @@ public class ReportingController : WebController
             monthlyReportItem.Month,
             monthlyReportItem.ReportItems
                 .Select(x => new ReportInfo(x.MacAddress, x.WakeUpCount, x.CallerIpAddresses))
-                .ToList());
+                .ToArray());
     }
 }

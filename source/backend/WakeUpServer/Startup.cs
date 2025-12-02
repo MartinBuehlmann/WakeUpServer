@@ -48,14 +48,13 @@ internal class Startup
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
-            app.UseForwardedHeaders();
         }
         else
         {
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            app.UseForwardedHeaders();
             app.UseHsts();
         }
+
+        app.UseForwardedHeaders();
 
         app.UseSerilogRequestLogging();
 
@@ -76,7 +75,6 @@ internal class Startup
             c.DisplayRequestDuration();
         });
 
-        app.UseStaticFiles();
         app.UseRouting();
         app.UseAuthorization();
 
