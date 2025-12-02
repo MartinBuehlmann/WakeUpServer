@@ -12,14 +12,10 @@
             </canvas>
         </div>
 
-        <p-datepicker
-            [(ngModel)]="selectedMonth"
-            [iconDisplay]="'input'"
-            [showIcon]="true"
-            view="month"
-            dateFormat="MM yy"
-            [readonlyInput]="true"
-            (onSelect)="onSelectedMonthChange(selectedMonth)">
-        </p-datepicker>
+        <div class="month-input">
+            <div class="month-field">
+                <input id="monthPicker" type="month" [(ngModel)]="selectedMonth" (ngModelChange)="onSelectedMonthChange($event)"/>
+            </div>
+        </div>
     </div>
 </div>
