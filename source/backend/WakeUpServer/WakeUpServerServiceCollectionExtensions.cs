@@ -1,6 +1,6 @@
 ﻿namespace WakeUpServer;
 
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using WakeUpServer.Api;
 using WakeUpServer.Common;
@@ -24,7 +24,7 @@ internal static class WakeUpServerServiceCollectionExtensions
 
     public static IServiceCollection AddCommonServices(this IServiceCollection services)
     {
-        services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         return services;
     }
 }

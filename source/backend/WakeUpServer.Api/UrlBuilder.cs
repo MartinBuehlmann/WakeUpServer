@@ -7,17 +7,17 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 public class UrlBuilder
 {
-    private readonly IActionContextAccessor actionContextAccessor;
+    private readonly IHttpContextAccessor httpContextAccessor;
 
-    public UrlBuilder(IActionContextAccessor actionContextAccessor)
+    public UrlBuilder(IHttpContextAccessor httpContextAccessor)
     {
-        this.actionContextAccessor = actionContextAccessor;
+        this.httpContextAccessor = httpContextAccessor;
     }
 
     public string Build(string routeName, string controller, string? resourceIdentifier = null)
     {
         const string ControllerAppendix = "Controller";
-        HttpContext httpContext = this.actionContextAccessor.ActionContext!.HttpContext;
+        HttpContext httpContext = this.httpContextAccessor.HttpContext!;
 
         var url = new StringBuilder()
             .Append(httpContext.Request.Scheme)
