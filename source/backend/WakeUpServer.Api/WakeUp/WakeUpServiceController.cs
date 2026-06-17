@@ -27,7 +27,7 @@ public class WakeUpServiceController : ApiController
     /// The computer needs to be in the same local area network.
     /// </summary>
     /// <param name="macAddressInfo">MAC address of the computer to wake up.</param>
-    /// <returns>HTTP status code 200 (OK) if call was successful.</returns>
+    /// <returns>HTTP status code 200 (OK) if the call was successful.</returns>
     [HttpPut]
     public async Task<IActionResult> WakeUpAsync([FromBody, Required] MacAddressInfo macAddressInfo)
     {
