@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { MonthlyReport } from '../services/models/monthly-report.model';
 import { ReportingService } from '../services/reporting-service';
@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
   imports: [BaseChartDirective, FormsModule],
   providers: [ReportingService],
   templateUrl: './monthly-usage.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './monthly-usage.component.scss'
 })
 export class MonthlyUsageComponent implements OnInit {
