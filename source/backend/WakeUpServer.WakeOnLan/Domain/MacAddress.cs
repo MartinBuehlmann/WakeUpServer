@@ -12,5 +12,5 @@ public class MacAddress
     public string Value { get; }
 
     public static MacAddress FromString(string macAddress)
-        => new MacAddress(macAddress.ToUpper(CultureInfo.InvariantCulture));
+        => new(macAddress.ToUpper(CultureInfo.InvariantCulture));
 }

@@ -8,9 +8,7 @@ using WakeUpServer.WakeOnLan.Domain;
 internal class WakeOnLanService : IWakeOnLanService
 {
     public async Task WakeOnLanAsync(MacAddress macAddress)
-    {
-        await PhysicalAddress
+        => await PhysicalAddress
             .Parse(macAddress.Value)
             .SendWolAsync();
-    }
 }

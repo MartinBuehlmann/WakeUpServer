@@ -36,7 +36,7 @@ internal class EventRegistration : IEventRegistration
             {
                 if (!this.subscriptions.TryGetValue(eventDataType, out List<IEventSubscriptionBase>? value))
                 {
-                    value = new List<IEventSubscriptionBase>();
+                    value = [];
                     this.subscriptions.Add(eventDataType, value);
                 }
 
